@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, Smartphone, Calendar, Menu, X, ChevronRight, ShieldCheck, MapPin, Mail } from 'lucide-react';
+import { Phone, Calendar, Menu, X, ChevronRight, ShieldCheck, MapPin, Mail } from 'lucide-react';
 import { DomestoLogo } from './DomestoLogo';
 import { BUSINESS_INFO } from '../data/domestoData';
 
