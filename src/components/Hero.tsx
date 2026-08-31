@@ -202,42 +202,74 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking }) => {
               ))}
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center pt-2 border-t border-white/15">
+            {/* Interactive Action Buttons Area */}
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4 items-stretch sm:items-center pt-4 border-t border-white/15">
+              
+              {/* 1. Main Booking CTA Button with Shimmer & Micro-Interactions */}
               <button
                 onClick={() => onOpenBooking(activeSlide.category)}
-                className="px-8 py-4 rounded-xl bg-gradient-lime text-slate-950 font-black text-base shadow-2xl hover:shadow-lime-500/30 hover:scale-[1.03] active:scale-95 transition-all duration-200 flex items-center justify-center gap-3 group cursor-pointer"
+                className="relative group overflow-hidden px-7 py-4 rounded-2xl bg-gradient-lime text-slate-950 font-black text-base shadow-2xl shadow-lime-500/25 hover:shadow-lime-500/40 hover:scale-[1.03] active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer"
               >
-                <Calendar className="w-5 h-5 text-slate-950" />
-                <span>{activeSlide.ctaText}</span>
-                <ArrowRight className="w-4 h-4 text-slate-950 group-hover:translate-x-1 transition-transform" />
+                <div className="w-8 h-8 rounded-xl bg-slate-950/10 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                  <Calendar className="w-4 h-4 text-slate-950" />
+                </div>
+                <span className="tracking-tight">{activeSlide.ctaText}</span>
+                <ArrowRight className="w-4 h-4 text-slate-950 group-hover:translate-x-1.5 transition-transform duration-300" />
+                
+                {/* Subtle Glass Shimmer Sweep */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none" />
               </button>
 
+              {/* 2. Secondary Explore Services Glass Button */}
               <a
                 href="#services"
-                className="px-7 py-4 rounded-xl bg-white/10 backdrop-blur-md text-white border border-white/25 font-bold text-base shadow-lg hover:bg-white/20 hover:border-white/40 hover:scale-[1.01] transition-all duration-200 flex items-center justify-center gap-2 text-center"
+                className="px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white border border-white/20 hover:border-white/40 font-bold text-base shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 group"
               >
                 <span>Explore Services</span>
-                <ArrowUpRight className="w-4 h-4 text-slate-300" />
+                <ArrowUpRight className="w-4 h-4 text-domesto-lime group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
 
-              <a
-                href={`tel:${BUSINESS_INFO.phoneClean}`}
-                className="px-6 py-4 rounded-xl bg-domesto-navy/80 backdrop-blur-md border border-white/20 text-white font-bold text-sm sm:text-base hover:bg-domesto-navy hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2.5 text-center shadow-lg group"
-                title={`Call Office Landline: ${BUSINESS_INFO.phone}`}
-              >
-                <Phone className="w-4 h-4 text-domesto-lime group-hover:scale-110 transition-transform" />
-                <span>Call Office</span>
-              </a>
+              {/* 3. Direct Contact Capsule Bar with Live Pulse Beacon */}
+              <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-950/60 backdrop-blur-2xl border border-white/15 shadow-2xl">
+                <div className="px-3 py-1 flex items-center gap-2 border-r border-white/10 hidden xl:flex">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                  </span>
+                  <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider">Live</span>
+                </div>
 
-              <a
-                href={`tel:${BUSINESS_INFO.mobileClean}`}
-                className="px-6 py-4 rounded-xl bg-emerald-950/80 backdrop-blur-md border border-emerald-400/30 text-white font-bold text-sm sm:text-base hover:bg-emerald-900 hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2.5 text-center shadow-lg group"
-                title={`Call Mobile Direct: ${BUSINESS_INFO.mobile}`}
-              >
-                <Smartphone className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
-                <span>Direct Mobile</span>
-              </a>
+                {/* Office Landline Button */}
+                <a
+                  href={`tel:${BUSINESS_INFO.phoneClean}`}
+                  className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-domesto-navy/90 hover:bg-domesto-navy text-white font-bold border border-white/10 hover:border-domesto-lime/50 hover:scale-105 active:scale-95 transition-all duration-200 group"
+                  title={`Call Office: ${BUSINESS_INFO.phone}`}
+                >
+                  <div className="p-1.5 rounded-lg bg-domesto-azure/20 text-domesto-lime group-hover:bg-domesto-lime group-hover:text-slate-950 transition-colors">
+                    <Phone className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="flex flex-col text-left">
+                    <span className="text-[10px] text-slate-300 font-medium leading-none">Office</span>
+                    <span className="text-xs font-extrabold text-white leading-tight">{BUSINESS_INFO.phone}</span>
+                  </div>
+                </a>
+
+                {/* Mobile Direct Button */}
+                <a
+                  href={`tel:${BUSINESS_INFO.mobileClean}`}
+                  className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-950/90 hover:bg-emerald-900 text-white font-bold border border-emerald-400/20 hover:border-emerald-400/60 hover:scale-105 active:scale-95 transition-all duration-200 group"
+                  title={`Call Mobile Direct: ${BUSINESS_INFO.mobile}`}
+                >
+                  <div className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 group-hover:bg-emerald-400 group-hover:text-slate-950 transition-colors">
+                    <Smartphone className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="flex flex-col text-left">
+                    <span className="text-[10px] text-emerald-300/80 font-medium leading-none">Direct</span>
+                    <span className="text-xs font-extrabold text-white leading-tight">{BUSINESS_INFO.mobile}</span>
+                  </div>
+                </a>
+              </div>
+
             </div>
 
             {/* Trust Metrics Footer Bar */}
