@@ -22,6 +22,7 @@ import { CookieConsent } from './components/CookieConsent';
 import { BackToTop } from './components/BackToTop';
 import { BookingModal } from './components/BookingModal';
 import { LegalModal } from './components/LegalModal';
+import { SmoothScroll } from './components/SmoothScroll';
 
 export function App() {
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
@@ -37,84 +38,86 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-sky-200 selection:text-domesto-navy">
-      {/* Navigation Header */}
-      <Navbar onOpenBooking={handleOpenBooking} />
+    <SmoothScroll>
+      <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-sky-200 selection:text-domesto-navy">
+        {/* Navigation Header */}
+        <Navbar onOpenBooking={handleOpenBooking} />
 
-      {/* Main Content Sections */}
-      <main>
-        {/* 1. Hero Section */}
-        <Hero onOpenBooking={() => handleOpenBooking()} />
+        {/* Main Content Sections */}
+        <main>
+          {/* 1. Hero Section */}
+          <Hero onOpenBooking={() => handleOpenBooking()} />
 
-        {/* 2. Trust Feature Cards */}
-        <TrustFeatures onOpenBooking={() => handleOpenBooking()} />
+          {/* 2. Trust Feature Cards */}
+          <TrustFeatures onOpenBooking={() => handleOpenBooking()} />
 
-        {/* 3. Statistics Counter */}
-        <StatsSection />
+          {/* 3. Statistics Counter */}
+          <StatsSection />
 
-        {/* 4. About Section */}
-        <AboutSection onOpenBooking={() => handleOpenBooking()} />
+          {/* 4. About Section */}
+          <AboutSection onOpenBooking={() => handleOpenBooking()} />
 
-        {/* 5. Main Services Grid + Detail Modal */}
-        <ServicesGrid onOpenBooking={handleOpenBooking} />
+          {/* 5. Main Services Grid + Detail Modal */}
+          <ServicesGrid onOpenBooking={handleOpenBooking} />
 
-        {/* 6. Popular Services Highlight */}
-        <PopularServices onOpenBooking={handleOpenBooking} />
+          {/* 6. Popular Services Highlight */}
+          <PopularServices onOpenBooking={handleOpenBooking} />
 
-        {/* 7. Why Choose Domesto */}
-        <WhyChooseUs />
+          {/* 7. Why Choose Domesto */}
+          <WhyChooseUs />
 
-        {/* 8. Pricing Section */}
-        <PricingSection onOpenBooking={handleOpenBooking} />
+          {/* 8. Pricing Section */}
+          <PricingSection onOpenBooking={handleOpenBooking} />
 
-        {/* 9. NDIS Dedicated Section */}
-        <NDISSection onOpenBooking={handleOpenBooking} />
+          {/* 9. NDIS Dedicated Section */}
+          <NDISSection onOpenBooking={handleOpenBooking} />
 
-        {/* 10. Process Section */}
-        <ProcessSection />
+          {/* 10. Process Section */}
+          <ProcessSection />
 
-        {/* 11. Team Showcase */}
-        <TeamSection />
+          {/* 11. Team Showcase */}
+          <TeamSection />
 
-        {/* 12. Testimonials Carousel */}
-        <Testimonials />
+          {/* 12. Testimonials Carousel */}
+          <Testimonials />
 
-        {/* 13. Projects Gallery & Interactive Before/After Slider */}
-        <ProjectsGallery onOpenBooking={handleOpenBooking} />
+          {/* 13. Projects Gallery & Interactive Before/After Slider */}
+          <ProjectsGallery onOpenBooking={handleOpenBooking} />
 
-        {/* 14. Work Quality Metrics */}
-        <QualitySection />
+          {/* 14. Work Quality Metrics */}
+          <QualitySection />
 
-        {/* 15. Inline Booking Section */}
-        <BookingSection initialService={selectedServiceForBooking} />
+          {/* 15. Inline Booking Section */}
+          <BookingSection initialService={selectedServiceForBooking} />
 
-        {/* 16. Contact Section & Map */}
-        <ContactSection onOpenBooking={() => handleOpenBooking()} />
-      </main>
+          {/* 16. Contact Section & Map */}
+          <ContactSection onOpenBooking={() => handleOpenBooking()} />
+        </main>
 
-      {/* Footer */}
-      <Footer
-        onOpenBooking={handleOpenBooking}
-        onOpenLegalModal={(title, content) => setLegalModal({ title, content })}
-      />
+        {/* Footer */}
+        <Footer
+          onOpenBooking={handleOpenBooking}
+          onOpenLegalModal={(title, content) => setLegalModal({ title, content })}
+        />
 
-      {/* Global Interactive Overlays */}
-      <StickyMobileBar onOpenBooking={() => handleOpenBooking()} />
-      <CookieConsent />
-      <BackToTop />
+        {/* Global Interactive Overlays */}
+        <StickyMobileBar onOpenBooking={() => handleOpenBooking()} />
+        <CookieConsent />
+        <BackToTop />
 
-      <BookingModal
-        isOpen={bookingModalOpen}
-        onClose={() => setBookingModalOpen(false)}
-        serviceName={selectedServiceForBooking}
-      />
+        <BookingModal
+          isOpen={bookingModalOpen}
+          onClose={() => setBookingModalOpen(false)}
+          serviceName={selectedServiceForBooking}
+        />
 
-      <LegalModal
-        title={legalModal.title}
-        content={legalModal.content}
-        onClose={() => setLegalModal({ title: null, content: null })}
-      />
-    </div>
+        <LegalModal
+          title={legalModal.title}
+          content={legalModal.content}
+          onClose={() => setLegalModal({ title: null, content: null })}
+        />
+      </div>
+    </SmoothScroll>
   );
 }
 

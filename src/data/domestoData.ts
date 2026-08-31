@@ -146,7 +146,7 @@ export const SERVICES: ServiceItem[] = [
     name: 'High Pressure Cleaning',
     category: 'Exterior Care',
     iconName: 'Zap',
-    image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1000&q=80',
+    image: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=1000&q=80',
     shortDesc: 'Powerful exterior pressure cleaning for residential driveways, paths, and walls.',
     fullDesc: 'Remove years of built-up grime, moss, oil stains, and dirt from your exterior hard surfaces using commercial high-pressure jet washers.',
     popular: true,
@@ -420,7 +420,7 @@ export const PROJECTS: ProjectItem[] = [
     title: 'High Pressure Driveway Wash',
     category: 'Pressure Cleaning',
     description: 'Heavy duty pressure cleaning removing oil stains, algae, and years of grime from a concrete driveway.',
-    image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1000&q=80',
+    image: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=1000&q=80',
     suburb: 'St Kilda, VIC',
     highlights: ['Oil Stain Removal', 'Pressure Washing', 'Concrete Refresh']
   },

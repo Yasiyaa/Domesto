@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   ShieldCheck, 
   Calendar, 
@@ -15,7 +15,10 @@ import {
   Building2, 
   Trees, 
   HeartHandshake,
-  ArrowUpRight
+  Layers,
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/domestoData';
 
@@ -66,27 +69,45 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking }) => {
       badge: 'HIGH PRESSURE & EXTERIOR REFRESH',
       title: 'Commercial Office & High Pressure Washing',
       subtitle: 'Banish oil stains, algae, and grime from driveways, concrete paths, gutters, and commercial workplaces.',
-      image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=2000&q=85',
+      image: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=2000&q=85',
       category: 'Pressure Washing & Exterior Care',
       startingPrice: 'Custom Quotes',
       ctaText: 'Request Commercial Care',
       icon: Building2,
       highlights: ['Industrial Pressure Wash', 'Gutter Debris Clearing', 'Flexible After-Hours']
+    },
+    {
+      id: 5,
+      badge: 'CARPET & UPHOLSTERY HYGIENE',
+      title: 'Deep Carpet & Steam Extraction Care',
+      subtitle: 'Revitalise your carpets, rugs, and lounge furniture with non-toxic hot water extraction and allergen treatment.',
+      image: 'https://images.unsplash.com/photo-1558317374-067fb5f30001?auto=format&fit=crop&w=2000&q=85',
+      category: 'Carpet & Upholstery Cleaning',
+      startingPrice: 'From $99',
+      ctaText: 'Book Carpet Cleaning',
+      icon: Layers,
+      highlights: ['Hot Water Steam Extraction', 'Stain & Pet Odour Removal', 'Fast 2-Hour Dry Time']
     }
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
   const [selectedQuickService, setSelectedQuickService] = useState('Domestic Cleaning');
 
-  // Auto-play timer (5.5 seconds per slide)
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  }, [slides.length]);
+
+  const prevSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  }, [slides.length]);
+
+  // Continuous auto-play timer every 4.5 seconds
   useEffect(() => {
-    if (!isPlaying) return;
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5500);
-    return () => clearInterval(interval);
-  }, [isPlaying, slides.length]);
+    const timer = setInterval(() => {
+      nextSlide();
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [nextSlide]);
 
   const activeSlide = slides[currentSlide];
   const ActiveIcon = activeSlide.icon;
@@ -94,38 +115,53 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking }) => {
   return (
     <section 
       id="hero" 
-      className="relative w-full min-h-[92vh] lg:min-h-screen flex items-center justify-center overflow-hidden bg-slate-950 text-white pt-36 sm:pt-40 lg:pt-48 pb-20 sm:pb-24"
-      onMouseEnter={() => setIsPlaying(false)}
-      onMouseLeave={() => setIsPlaying(true)}
+      className="relative w-full min-h-[92vh] lg:min-h-screen flex items-center justify-center overflow-hidden bg-slate-950 text-white pt-36 sm:pt-40 lg:pt-48 pb-20 sm:pb-24 select-none"
     >
-      {/* Background Banner Slides with LOWER OPACITY OVERLAYS */}
+      {/* Background Banner Slides */}
       {slides.map((slide, idx) => (
         <div
           key={slide.id}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-            idx === currentSlide ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
+            idx === currentSlide ? 'opacity-100 scale-100 z-0' : 'opacity-0 scale-105 pointer-events-none -z-10'
           }`}
         >
           <img
             src={slide.image}
             alt={slide.title}
-            className={`w-full h-full object-cover object-center transform transition-transform duration-[8000ms] ease-out filter brightness-105 contrast-[1.02] ${
+            className={`w-full h-full object-cover object-center transform transition-transform duration-[7000ms] ease-out filter brightness-105 contrast-[1.02] ${
               idx === currentSlide ? 'scale-105' : 'scale-100'
             }`}
           />
           
-          {/* ULTRA-LIGHT LOW OPACITY OVERLAYS - Bright Hero photos with high clarity */}
-          <div className="absolute inset-0 bg-slate-950/15"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/45 via-emerald-950/15 to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-slate-950/15"></div>
+          {/* Subtle gradient overlays for text readability */}
+          <div className="absolute inset-0 bg-slate-950/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-950/40 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/30"></div>
         </div>
       ))}
+
+      {/* Slide Navigation Arrows */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 p-3.5 rounded-full bg-slate-950/40 hover:bg-domesto-navy text-white/80 hover:text-white backdrop-blur-md border border-white/20 hover:border-domesto-lime shadow-xl hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer hidden sm:flex items-center justify-center"
+        aria-label="Previous slide"
+      >
+        <ChevronLeft className="w-6 h-6 text-domesto-lime" />
+      </button>
+
+      <button
+        onClick={nextSlide}
+        className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 p-3.5 rounded-full bg-slate-950/40 hover:bg-domesto-navy text-white/80 hover:text-white backdrop-blur-md border border-white/20 hover:border-domesto-lime shadow-xl hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer hidden sm:flex items-center justify-center"
+        aria-label="Next slide"
+      >
+        <ChevronRight className="w-6 h-6 text-domesto-lime" />
+      </button>
 
       {/* Main Grid Content Container */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full my-auto py-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
-          {/* Main Hero Content (Clean layout without background card view) */}
+          {/* Main Hero Content */}
           <div className="lg:col-span-8 space-y-6">
             
             {/* Top Badges Row */}
@@ -144,7 +180,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking }) => {
             </div>
 
             {/* Slide Title */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1] drop-shadow-lg mb-4">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1] drop-shadow-lg mb-4 min-h-[1.2em]">
               {activeSlide.title}
             </h1>
 
@@ -187,20 +223,20 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking }) => {
 
               <a
                 href={`tel:${BUSINESS_INFO.phoneClean}`}
-                className="px-5 py-4 rounded-xl bg-domesto-navy/80 backdrop-blur-md border border-white/20 text-white font-bold text-sm sm:text-base hover:bg-domesto-navy transition-colors flex items-center justify-center gap-2 text-center"
-                title="Call Office Landline"
+                className="px-6 py-4 rounded-xl bg-domesto-navy/80 backdrop-blur-md border border-white/20 text-white font-bold text-sm sm:text-base hover:bg-domesto-navy hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2.5 text-center shadow-lg group"
+                title={`Call Office Landline: ${BUSINESS_INFO.phone}`}
               >
-                <Phone className="w-4 h-4 text-domesto-lime" />
-                <span>{BUSINESS_INFO.phone}</span>
+                <Phone className="w-4 h-4 text-domesto-lime group-hover:scale-110 transition-transform" />
+                <span>Call Office</span>
               </a>
 
               <a
                 href={`tel:${BUSINESS_INFO.mobileClean}`}
-                className="px-5 py-4 rounded-xl bg-emerald-950/70 backdrop-blur-md border border-emerald-400/30 text-white font-bold text-sm sm:text-base hover:bg-emerald-900 transition-colors flex items-center justify-center gap-2 text-center"
-                title="Call Mobile Direct"
+                className="px-6 py-4 rounded-xl bg-emerald-950/80 backdrop-blur-md border border-emerald-400/30 text-white font-bold text-sm sm:text-base hover:bg-emerald-900 hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2.5 text-center shadow-lg group"
+                title={`Call Mobile Direct: ${BUSINESS_INFO.mobile}`}
               >
-                <Smartphone className="w-4 h-4 text-emerald-400" />
-                <span>{BUSINESS_INFO.mobile}</span>
+                <Smartphone className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+                <span>Direct Mobile</span>
               </a>
             </div>
 
@@ -229,10 +265,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking }) => {
 
           </div>
 
-          {/* Right Column: Quick Booking Selector Widget (Desktop Glass Card) */}
-          <div className="hidden lg:col-span-4 lg:flex flex-col justify-between bg-slate-950/45 backdrop-blur-xl border border-white/20 p-7 rounded-3xl shadow-2xl shadow-slate-950/60">
+          {/* Right Column: Quick Booking Selector Widget */}
+          <div className="hidden lg:col-span-4 lg:flex flex-col justify-between bg-slate-950/45 backdrop-blur-xl border border-white/20 p-6 rounded-3xl shadow-2xl shadow-slate-950/60">
             <div>
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3">
                 <div className="inline-flex items-center gap-2 text-domesto-lime font-bold text-xs uppercase tracking-wider">
                   <Zap className="w-4 h-4 text-domesto-lime" />
                   <span>Instant Quick Booking</span>
@@ -243,41 +279,40 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking }) => {
                 </span>
               </div>
 
-              <h3 className="text-xl font-bold text-white mb-2">Book Your Service in 60 Secs</h3>
-              <p className="text-xs text-slate-300 mb-6">Select a category below to get guaranteed upfront pricing and transparent booking.</p>
+              <h3 className="text-lg font-bold text-white mb-1">Book Your Service in 60 Secs</h3>
+              <p className="text-xs text-slate-300 mb-4">Select a category below to get guaranteed upfront pricing and transparent booking.</p>
 
               {/* Service Selection Buttons */}
-              <div className="space-y-2.5 mb-6">
+              <div className="space-y-2 mb-4">
                 {[
                   { name: 'Domestic Cleaning', tag: 'From $38/hr', icon: Sparkles },
                   { name: 'Ground Maintenance', tag: 'From $49/hr', icon: Trees },
                   { name: 'Caretaker & NDIS Care', tag: 'From $42/hr', icon: HeartHandshake },
                   { name: 'Commercial Cleaning', tag: 'Custom Quote', icon: Building2 },
-                ].map((item) => {
+                  { name: 'Carpet & Upholstery', tag: 'From $99', icon: Layers },
+                ].map((item, idx) => {
                   const ItemIcon = item.icon;
-                  const isSelected = selectedQuickService === item.name;
+                  const isSelected = selectedQuickService === item.name || currentSlide === idx;
                   return (
                     <button
                       key={item.name}
                       onClick={() => {
                         setSelectedQuickService(item.name);
-                        // Also sync current slide if matches
-                        const slideIdx = slides.findIndex(s => s.category.includes(item.name.split(' ')[0]));
-                        if (slideIdx !== -1) setCurrentSlide(slideIdx);
+                        setCurrentSlide(idx);
                       }}
-                      className={`w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between cursor-pointer ${
+                      className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between cursor-pointer ${
                         isSelected 
                           ? 'bg-domesto-navy text-white border-domesto-lime shadow-md ring-1 ring-domesto-lime' 
                           : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className={`p-2 rounded-lg ${isSelected ? 'bg-domesto-green text-slate-950' : 'bg-white/10 text-domesto-lime'}`}>
-                          <ItemIcon className="w-4 h-4" />
+                      <div className="flex items-center gap-2.5">
+                        <div className={`p-1.5 rounded-lg ${isSelected ? 'bg-domesto-green text-slate-950' : 'bg-white/10 text-domesto-lime'}`}>
+                          <ItemIcon className="w-3.5 h-3.5" />
                         </div>
-                        <span className="text-sm font-semibold">{item.name}</span>
+                        <span className="text-xs font-semibold">{item.name}</span>
                       </div>
-                      <span className={`text-xs font-bold ${isSelected ? 'text-domesto-lime' : 'text-slate-400'}`}>
+                      <span className={`text-[11px] font-bold ${isSelected ? 'text-domesto-lime' : 'text-slate-400'}`}>
                         {item.tag}
                       </span>
                     </button>
@@ -289,7 +324,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking }) => {
             {/* Quick Action Trigger */}
             <button
               onClick={() => onOpenBooking(selectedQuickService)}
-              className="w-full py-3.5 rounded-xl bg-gradient-lime text-slate-950 font-black text-sm shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3 rounded-xl bg-gradient-lime text-slate-950 font-black text-sm shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
             >
               <Calendar className="w-4 h-4 text-slate-950" />
               <span>Book {selectedQuickService.split(' ')[0]} Now</span>
@@ -298,6 +333,22 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking }) => {
           </div>
 
         </div>
+      </div>
+
+      {/* Slide Navigation Dots */}
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-950/50 backdrop-blur-md border border-white/10">
+        {slides.map((slide, idx) => (
+          <button
+            key={slide.id}
+            onClick={() => setCurrentSlide(idx)}
+            className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+              idx === currentSlide 
+                ? 'w-8 bg-domesto-lime shadow-lg shadow-lime-500/50' 
+                : 'w-2.5 bg-white/40 hover:bg-white/70'
+            }`}
+            aria-label={`Go to slide ${idx + 1}: ${slide.category}`}
+          />
+        ))}
       </div>
     </section>
   );
